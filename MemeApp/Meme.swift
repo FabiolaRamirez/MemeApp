@@ -6,7 +6,7 @@
 //  Copyright © 2017 Fabiola Ramirez. All rights reserved.
 //
 
-import Foundation
+
 import UIKit
 
 struct Meme {
@@ -16,14 +16,6 @@ struct Meme {
     var originalImage: UIImage
     var memedImage: UIImage
     
-    init (topText:String, bottomText:String, originalImage:UIImage, memedImage:UIImage) {
-        
-        self.topText=topText
-        self.bottomText=bottomText
-        self.originalImage=originalImage
-        self.memedImage=memedImage
-        
-    }
 }
 
 

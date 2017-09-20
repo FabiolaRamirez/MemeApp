@@ -33,13 +33,16 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        topTextField.delegate = self
-        bottomTextField.delegate = self
-        topTextField.defaultTextAttributes = memeTextAttributes
-        bottomTextField.defaultTextAttributes = memeTextAttributes
-        topTextField.textAlignment = NSTextAlignment.center
-        bottomTextField.textAlignment = NSTextAlignment.center
         shareButtonItem.isEnabled = false
+        
+        configure(textField: topTextField, text: "TOP", defaultAttributes: memeTextAttributes)
+        configure(textField: bottomTextField, text: "BOTTOM", defaultAttributes: memeTextAttributes)
+    }
+    
+    func configure(textField: UITextField, text: String, defaultAttributes: [String:Any]){
+        textField.delegate = self
+        textField.defaultTextAttributes = defaultAttributes
+        textField.textAlignment = NSTextAlignment.center
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -56,24 +59,19 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     }
     
     
-    
     @IBAction func pickaAnImage(_ sender: Any) {
-        
-        let pickerController = UIImagePickerController()
-        pickerController.delegate = self
-        pickerController.sourceType = .photoLibrary
-        present(pickerController, animated: true, completion: nil)
-        
+        presentImagePickerWith(sourceType: .photoLibrary)
     }
     
     @IBAction func pickAnImageFromCamera(_ sender: Any) {
-        
+        presentImagePickerWith(sourceType: .camera)
+    }
+    
+    func presentImagePickerWith(sourceType: UIImagePickerControllerSourceType){
         let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = sourceType
         imagePicker.delegate = self
-        imagePicker.sourceType =
-            UIImagePickerControllerSourceType.camera
-        self.present(imagePicker, animated: true, completion: nil)
-        
+        present(imagePicker, animated: true, completion: nil)
     }
     
     
@@ -148,7 +146,7 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     
     
     func save(){
-        if imagePickerView.image != nil {
+        if imagePickerView.image != nil {            
             meme = Meme(topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage: imagePickerView.image!, memedImage: generateMemedImage())
             appDelegate.memes.append(meme)
             //UIImageWriteToSavedPhotosAlbum(meme.memedImage, nil, nil, nil)
@@ -185,7 +183,13 @@ UINavigationControllerDelegate, UITextFieldDelegate {
             let shareItems:[Any] = [meme.memedImage]
             let activityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
             activityViewController.popoverPresentationController?.sourceView = self.view
-            save()
+            
+            activityViewController.completionWithItemsHandler = {
+                (_,success,_,_) in
+                if success{
+                    self.save()
+                }
+            }
             present(activityViewController, animated: true, completion: nil)
         }
     }
