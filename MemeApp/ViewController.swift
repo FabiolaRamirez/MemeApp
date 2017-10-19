@@ -28,6 +28,7 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     let memeTextAttributes:[String:Any] = [
         NSStrokeColorAttributeName: UIColor.blue,
         NSForegroundColorAttributeName: UIColor.white,
+        NSStrokeWidthAttributeName: -3.0,
         NSFontAttributeName: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!]
     
     
@@ -93,8 +94,7 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     // MARK: - TextField Delegate methods
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        topTextField.resignFirstResponder()
-        bottomTextField.resignFirstResponder()
+        textField.resignFirstResponder()
         
         return true
     }
@@ -113,9 +113,12 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     
     func keyboardWillShow(_ notification:Notification) {
         
-        view.frame.origin.y = 0 - getKeyboardHeight(notification)
+        //view.frame.origin.y = 0 - getKeyboardHeight(notification)
         //view.frame.origin.y -= getKeyboardHeight(notification)
         
+        if bottomTextField.isFirstResponder {
+            view.frame.origin.y = 0 - getKeyboardHeight(notification)
+        }
     }
     
     func getKeyboardHeight(_ notification:Notification) -> CGFloat {
@@ -157,19 +160,22 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     
     func generateMemedImage() -> UIImage{
         
-        self.navigationController?.isNavigationBarHidden = true
-        self.tabBar.alpha = 0
+        toogleBars(hide: true)
         
         UIGraphicsBeginImageContext(self.view.frame.size)
         view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
         let memedImage : UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
-        self.navigationController?.isNavigationBarHidden = false
-        self.tabBar.alpha = 1
+        toogleBars(hide: false)
         
         return memedImage
         
+    }
+    
+    func toogleBars(hide: Bool) {
+        navigationController?.isNavigationBarHidden = hide
+        tabBar.alpha = hide ? 0 : 1
     }
     
     @IBAction func cancel(_ sender: Any) {
@@ -179,17 +185,19 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     
     @IBAction func shareImage(_ sender: Any) {
         if imagePickerView.image != nil {
-            meme = Meme(topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage: imagePickerView.image!, memedImage: generateMemedImage())
-            let shareItems:[Any] = [meme.memedImage]
-            let activityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
+            let shareItems:[Any] = [generateMemedImage()]
+            let activityViewController = UIActivityViewController(activityItems: shareItems,
+                                                                  applicationActivities: nil)
             activityViewController.popoverPresentationController?.sourceView = self.view
             
             activityViewController.completionWithItemsHandler = {
-                (_,success,_,_) in
+                (_, success, _, _) in
                 if success{
                     self.save()
+                    self.dismiss(animated: true, completion: nil)
                 }
             }
+            
             present(activityViewController, animated: true, completion: nil)
         }
     }

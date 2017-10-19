@@ -38,6 +38,7 @@ class MemeCollectionViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         memes = appDelegate.memes
         self.flowLayout.reloadData()
     }
