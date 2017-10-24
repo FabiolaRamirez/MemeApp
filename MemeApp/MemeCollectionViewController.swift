@@ -48,7 +48,7 @@ class MemeCollectionViewController: UIViewController {
     
     @IBAction func addMeme(_ sender: Any) {
         
-        let viewController : ViewController? = self.storyboard?.instantiateViewController(withIdentifier: "viewController") as? ViewController
+        let viewController : MemeEditorViewController? = self.storyboard?.instantiateViewController(withIdentifier: "memeEditorViewController") as? MemeEditorViewController
         let navigationController : UINavigationController = UINavigationController(rootViewController: viewController!)
         self.present(navigationController, animated: true, completion: nil)
         

@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MemeEditorViewController.swift
 //  MemeApp
 //
 //  Created by Fabiola Ramirez on 4/8/17.
@@ -8,8 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate,
-UINavigationControllerDelegate, UITextFieldDelegate {
+class MemeEditorViewController: UIViewController {
     
     
     @IBOutlet weak var tabBar: UIToolbar!
@@ -68,85 +67,6 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         presentImagePickerWith(sourceType: .camera)
     }
     
-    func presentImagePickerWith(sourceType: UIImagePickerControllerSourceType){
-        let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = sourceType
-        imagePicker.delegate = self
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
-    
-    //   MARK: - imagePickerController Delegate methods
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
-        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            shareButtonItem.isEnabled = true
-            imagePickerView.image = image
-        }
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    // MARK: - TextField Delegate methods
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        
-        return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField.tag == 1 {
-            topTextField.text = ""
-        } else {
-            bottomTextField.text = ""
-        }
-    }
-    
-    
-    
-    // Move the view when the keyboard covers the textfield
-    
-    func keyboardWillShow(_ notification:Notification) {
-        
-        //view.frame.origin.y = 0 - getKeyboardHeight(notification)
-        //view.frame.origin.y -= getKeyboardHeight(notification)
-        
-        if bottomTextField.isFirstResponder {
-            view.frame.origin.y = 0 - getKeyboardHeight(notification)
-        }
-    }
-    
-    func getKeyboardHeight(_ notification:Notification) -> CGFloat {
-        
-        let userInfo = notification.userInfo
-        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
-        return keyboardSize.cgRectValue.height
-    }
-    
-    func subscribeToKeyboardNotifications() {
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
-    }
-    
-    func unsubscribeFromKeyboardNotifications() {
-        
-        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
-    }
-    
-    
-    //other
-    
-    func keyboardWillHide(_ notification:Notification) {
-        view.frame.origin.y = 0
-    }
-    
     
     func save(){
         if imagePickerView.image != nil {            
@@ -201,8 +121,95 @@ UINavigationControllerDelegate, UITextFieldDelegate {
             present(activityViewController, animated: true, completion: nil)
         }
     }
+}
+
+extension MemeEditorViewController : UITextFieldDelegate {
+    
+    // MARK: - TextField Delegate methods
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField.tag == 1 {
+            topTextField.text = ""
+        } else {
+            bottomTextField.text = ""
+        }
+    }
     
     
+    
+    // Move the view when the keyboard covers the textfield
+    
+    func keyboardWillShow(_ notification:Notification) {
+        
+        if bottomTextField.isFirstResponder {
+            view.frame.origin.y = 0 - getKeyboardHeight(notification)
+        }
+    }
+    
+    func getKeyboardHeight(_ notification:Notification) -> CGFloat {
+        
+        let userInfo = notification.userInfo
+        let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
+        return keyboardSize.cgRectValue.height
+    }
+    
+    func subscribeToKeyboardNotifications() {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
+    }
+    
+    func unsubscribeFromKeyboardNotifications() {
+        
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
+    }
+    
+    
+    //other
+    
+    func keyboardWillHide(_ notification:Notification) {
+        view.frame.origin.y = 0
+    }
     
 }
+
+extension MemeEditorViewController: UINavigationControllerDelegate {
+    
+}
+
+extension MemeEditorViewController: UIImagePickerControllerDelegate {
+    
+    func presentImagePickerWith(sourceType: UIImagePickerControllerSourceType){
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = sourceType
+        imagePicker.delegate = self
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    
+    //   MARK: - imagePickerController Delegate methods
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            shareButtonItem.isEnabled = true
+            imagePickerView.image = image
+        }
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+}
+
+
 
