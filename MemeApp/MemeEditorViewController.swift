@@ -72,7 +72,7 @@ class MemeEditorViewController: UIViewController {
         if imagePickerView.image != nil {            
             meme = Meme(topText: topTextField.text!, bottomText: bottomTextField.text!, originalImage: imagePickerView.image!, memedImage: generateMemedImage())
             appDelegate.memes.append(meme)
-            //UIImageWriteToSavedPhotosAlbum(meme.memedImage, nil, nil, nil)
+            
         }
         
         
