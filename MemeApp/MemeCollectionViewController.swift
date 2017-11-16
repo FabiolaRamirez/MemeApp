@@ -27,13 +27,13 @@ class MemeCollectionViewController: UIViewController {
         self.flowLayout?.delegate = self
         self.flowLayout?.dataSource = self
         
-//        let space:CGFloat = 3.0
-//        let dimension = (view.frame.size.width - (2 * space)) / 3.0
-//        
-//        flowLayout.minimumInteritemSpacing = space
-//        flowLayout.mini
-//        flowLayout.minimumLineSpacing = space
-//        flowLayout.itemSize = CGSize(width: dimension, height: dimension)
+        //        let space:CGFloat = 3.0
+        //        let dimension = (view.frame.size.width - (2 * space)) / 3.0
+        //        
+        //        flowLayout.minimumInteritemSpacing = space
+        //        flowLayout.mini
+        //        flowLayout.minimumLineSpacing = space
+        //        flowLayout.itemSize = CGSize(width: dimension, height: dimension)
         
     }
     
@@ -42,8 +42,8 @@ class MemeCollectionViewController: UIViewController {
         memes = appDelegate.memes
         self.flowLayout.reloadData()
     }
-
- 
+    
+    
     
     
     @IBAction func addMeme(_ sender: Any) {
@@ -58,7 +58,7 @@ class MemeCollectionViewController: UIViewController {
 }
 
 extension MemeCollectionViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-
+    
     // MARK: UICollectionViewDataSource
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -92,5 +92,5 @@ extension MemeCollectionViewController: UICollectionViewDelegate, UICollectionVi
             }
         }
     }
-
+    
 }

@@ -40,6 +40,7 @@ class MemeTableViewController: UIViewController {
 }
 
 
+
 extension MemeTableViewController: UITableViewDataSource, UITableViewDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -67,6 +68,7 @@ extension MemeTableViewController: UITableViewDataSource, UITableViewDelegate {
         
         return cell
     }
+    
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

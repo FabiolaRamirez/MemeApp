@@ -142,7 +142,6 @@ extension MemeEditorViewController : UITextFieldDelegate {
     }
     
     
-    
     // Move the view when the keyboard covers the textfield
     
     func keyboardWillShow(_ notification:Notification) {
@@ -180,9 +179,11 @@ extension MemeEditorViewController : UITextFieldDelegate {
     
 }
 
+
 extension MemeEditorViewController: UINavigationControllerDelegate {
     
 }
+
 
 extension MemeEditorViewController: UIImagePickerControllerDelegate {
     
@@ -208,6 +209,8 @@ extension MemeEditorViewController: UIImagePickerControllerDelegate {
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
     }
+    
+    
     
 }
 
